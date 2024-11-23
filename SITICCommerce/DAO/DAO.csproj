@@ -1,9 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <!--<BaseOutputPath>C:\Users\ameri\OneDrive\Documentos\GitHub\proyecto\EnsambladosSITICCommerce</BaseOutputPath>-->
-    <!--<BaseOutputPath>C:\Users\ameri\OneDrive\Documentos\GitHub\proyecto\EnsambladosSITICCommerce</BaseOutputPath>-->
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,5 +16,4 @@
 	  </PackageReference>
 	  <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
 	</ItemGroup>
-
 </Project>
