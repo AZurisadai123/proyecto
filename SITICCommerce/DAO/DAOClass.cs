@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace DAO
 {
     public class DAOClass
@@ -16,11 +15,13 @@ namespace DAO
 
         public int Identity { get; set; }
 
-        static string server = "DESKTOP-ITUUEO6";
+        static string server = "VM-ANGULAR-ANDR";
         static string dateBase = "dbSiticCommerce";
         static string connectionString = string.Format("server={0}; database={1}; integrated security = true", server, dateBase);
-        /*static string user
-        static string connectionString2 = string.Format("server={0}; database={1}; integrated security = true", server, dateBase);*/
+        //Si tienen controlado la parte del login
+        //static string user = "";
+        //static string password = "";
+        //static string connectionString2 = string.Format("server={0}; database={1}; user id={2}; password={3};", server, dateBase, user, password);
 
         public DAOClass()
         {
@@ -60,12 +61,16 @@ namespace DAO
                 _transaction.Rollback();
         }
 
-        public DataTable QueryInformation(string procedureName, SqlParameterCollection parameters = null)
+        /*public DataTable QueryInformation(string procedureName, SqlParameterCollection parameters = null)
         {
             DataTable dt = new();
             using (SqlCommand sqlCmd = new(procedureName, _connectionString))
             {
                 sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                sqlCmd.Transaction = _transaction;
+
+                new Utilities.ParameterSanitizer(this).CleanParameterCollection(ref parameters, procedureName);
 
                 if (parameters != null)
                     foreach (SqlParameter param in parameters)
@@ -88,6 +93,9 @@ namespace DAO
                 sqlCmd.CommandType = CommandType.StoredProcedure;
 
                 sqlCmd.Transaction = _transaction;
+
+                new Utilities.ParameterSanitizer(this).CleanParameterCollection(ref parameters, procedureName);
+
                 foreach (SqlParameter param in parameters)
                 {
                     sqlCmd.Parameters.Add(param.ParameterName, param.SqlDbType);
@@ -99,7 +107,6 @@ namespace DAO
             return rows;
         }
 
-        //Pendiente
         public int ExecuteProcedureWithIdentity(string procedureName, SqlParameterCollection parameters)
         {
             int rows = 0;
@@ -110,10 +117,14 @@ namespace DAO
                 sqlCmd.CommandType = CommandType.StoredProcedure;
 
                 sqlCmd.Transaction = _transaction;
+
+                new Utilities.ParameterSanitizer(this).CleanParameterCollection(ref parameters, procedureName);
+
                 foreach (SqlParameter param in parameters)
                 {
                     sqlCmd.Parameters.Add(param.ParameterName, param.SqlDbType);
                     sqlCmd.Parameters[sqlCmd.Parameters.Count - 1].Value = param.Value;
+                    sqlCmd.Parameters[sqlCmd.Parameters.Count - 1].Direction = param.Direction;
                     if (param.Direction == ParameterDirection.Output || param.Direction == ParameterDirection.ReturnValue)
                         nameOutput = param.ParameterName;
                 }
@@ -125,6 +136,24 @@ namespace DAO
             return rows;
         }
 
+        public DataTable ExecuteQuery(string sqlQuery)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlCommand sqlCmd = new SqlCommand(sqlQuery, _connectionString))
+            {
+                sqlCmd.CommandType = CommandType.Text;
+
+                sqlCmd.Transaction = _transaction;
+
+                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(sqlCmd))
+                {
+                    sqlDataAdapter.Fill(dt);
+                }
+            }
+
+            return dt;
+        }*/
+
     }
 }
-

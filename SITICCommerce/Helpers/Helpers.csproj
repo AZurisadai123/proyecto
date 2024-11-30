@@ -8,7 +8,4 @@
 		<OutputPath>C:\Users\ameri\OneDrive\Documentos\GitHub\proyecto\EnsambladosSITICCommerce</OutputPath>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
-	</ItemGroup>
 </Project>
